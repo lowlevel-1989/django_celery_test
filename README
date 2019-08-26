@@ -1,0 +1,10 @@
+TEST
+$ python3 -m venv env
+$ source env/bin/activate
+$ pip install -r requirements.txt
+$ cd demo
+$ docker run --rm -d -p 6379:6379 redis
+$ python manage.py migrate
+$ celery -A demo worker -c 1 -l info -O fair
+$ python manage.py test
+$ python manage.py runserver
