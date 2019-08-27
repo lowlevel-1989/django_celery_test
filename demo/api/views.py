@@ -15,6 +15,8 @@ class ResultViewSet(
     serializer_class = ResultSerializer
 
     def perform_create(self, serializer):
-        obj = serializer.save()
-        r = tasks.add.delay(obj.pk, 2, 2)
-        obj = serializer.save(task_id=r.id)
+        pk = serializer.validated_data.get('id')
+        x = serializer.validated_data.pop('x')
+        y = serializer.validated_data.pop('y')
+        r = tasks.add.delay(pk, x, y)
+        serializer.save(task_id=r.id)
